@@ -1,0 +1,3 @@
+@echo off
+echo Starting UrbanFarm Admin Panel on port 8000...
+npx serve -l 8000

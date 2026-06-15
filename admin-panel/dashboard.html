@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - UrbanFarm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div class="title">
+                    <h2>Admin Panel</h2>
+                    <span>UrbanFarm CMS</span>
+                </div>
+            </div>
+
+            <div class="user-info">
+                <div class="avatar" id="admin-initial">A</div>
+                <div class="details">
+                    <h3 id="admin-name">Admin</h3>
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-label">MENU</div>
+                <a href="#" class="nav-item active">
+                    <i data-lucide="layout-template"></i> Manajemen Teks
+                </a>
+                <a href="http://localhost:8081" target="_blank" class="nav-item">
+                    <i data-lucide="external-link"></i> Lihat Aplikasi
+                </a>
+            </nav>
+
+            <a href="#" class="nav-item logout-btn" id="logout-btn">
+                <i data-lucide="log-out"></i> Keluar
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Manajemen Teks Halaman</h1>
+                <p>Edit judul dan deskripsi di setiap halaman UrbanFarm. Perubahan langsung berlaku tanpa perlu deploy ulang.</p>
+            </div>
+
+            <div class="accordion">
+                <!-- Dashboard -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="layout-dashboard"></i></div>
+                            <div class="accordion-title">
+                                <h3>Dashboard</h3>
+                                <p>Halaman beranda utama</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_dashboard" placeholder="Pusat kendali ekosistem urban Anda aktif.">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Lahan -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="map"></i></div>
+                            <div class="accordion-title">
+                                <h3>Area Lahan</h3>
+                                <p>Halaman manajemen lahan</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_lahan" placeholder="Halaman manajemen lahan">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Jadwal -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="calendar"></i></div>
+                            <div class="accordion-title">
+                                <h3>Alur Kerja</h3>
+                                <p>Halaman jadwal pekerjaan</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_jadwal" placeholder="Pantau jadwal perawatan tanaman Anda">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Katalog -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="book-open"></i></div>
+                            <div class="accordion-title">
+                                <h3>Edukasi Bibit</h3>
+                                <p>Halaman katalog tanaman</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_katalog" placeholder="Pilih bibit terbaik untuk lahan Anda">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Komunitas -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="users"></i></div>
+                            <div class="accordion-title">
+                                <h3>Komunitas</h3>
+                                <p>Halaman petani digital</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_komunitas" placeholder="Terhubung, belajar, dan berkolaborasi dengan jaringan agronomis modern">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- AI -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <div class="accordion-header-left">
+                            <div class="accordion-icon"><i data-lucide="bot"></i></div>
+                            <div class="accordion-title">
+                                <h3>AI Pakar Pertanian</h3>
+                                <p>Halaman chat asisten AI</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-toggle"></i>
+                    </div>
+                    <div class="accordion-body">
+                        <form class="setting-form">
+                            <div class="setting-group">
+                                <label class="setting-label">Subjudul / Kalimat Sambutan</label>
+                                <input type="text" class="setting-input" data-key="subtitle_ai" placeholder="Tanya masalah tanaman Anda">
+                            </div>
+                            <button type="submit" class="btn-save"><i data-lucide="save" style="width: 16px; height: 16px;"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

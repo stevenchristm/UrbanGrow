@@ -1,0 +1,23 @@
+node_modules/
+.env
+.env.*
+.idea/
+.vscode/
+
+# Backend
+backend/main.exe
+backend/uploads/
+backend/tmp/
+
+# Log files
+*.log
+
+# Frontend (Expo)
+frontend/.expo/
+frontend/dist/
+frontend/web-build/
+frontend/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
