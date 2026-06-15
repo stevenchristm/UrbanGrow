@@ -83,6 +83,9 @@ func GetJadwal(c *gin.Context) {
 
 				jr.HariKe = hariKe
 				jr.TotalHariPanen = 90
+				if tanamanInfo, exists := katalogRaw[j.NamaTanaman]; exists && tanamanInfo.EstimasiHariPanen != nil {
+					jr.TotalHariPanen = *tanamanInfo.EstimasiHariPanen
+				}
 				if j.DurasiPanen != nil && *j.DurasiPanen > 0 {
 					jr.TotalHariPanen = *j.DurasiPanen
 				}
@@ -194,6 +197,9 @@ func GetJadwal(c *gin.Context) {
 		} else {
 			jr.HariKe = 1
 			jr.TotalHariPanen = 90
+			if tanamanInfo, exists := katalogRaw[j.NamaTanaman]; exists && tanamanInfo.EstimasiHariPanen != nil {
+				jr.TotalHariPanen = *tanamanInfo.EstimasiHariPanen
+			}
 			jr.ProgresPersen = 0
 			jr.DaftarTugasHariIni = []TugasJadwal{}
 		}

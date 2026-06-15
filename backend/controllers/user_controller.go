@@ -19,7 +19,7 @@ func GetUsers(c *gin.Context) {
 	uid := userID.(uint)
 
 	var users []models.User
-	config.DB.Raw("SELECT * FROM users ORDER BY CASE WHEN id_user = ? THEN 1 ELSE 2 END, nama ASC", uid).Scan(&users)
+	config.DB.Raw("SELECT * FROM users WHERE role != 'admin' ORDER BY CASE WHEN id_user = ? THEN 1 ELSE 2 END, nama ASC", uid).Scan(&users)
 
 	type UserResponse struct {
 		IDUser   uint    `json:"id_user"`

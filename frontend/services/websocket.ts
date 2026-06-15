@@ -15,7 +15,7 @@ class WebSocketService {
   }
 
   private doConnect() {
-    if (this.ws?.readyState === WebSocket.OPEN) return;
+    if (this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING) return;
 
     try {
       this.ws = new WebSocket(WS_URL);
@@ -74,7 +74,7 @@ class WebSocketService {
     this.ws?.close();
     this.ws = null;
     this.isConnected = false;
-    this.handlers.clear();
+    // Do NOT clear handlers here, otherwise global listeners in _layout.tsx will be lost after logout!
   }
 
   getIsConnected() {

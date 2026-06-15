@@ -468,6 +468,15 @@ Hanya kembalikan JSON object murni tanpa markdown blocks.`
 		return
 	}
 
+	// Auto-sync the catalog and existing schedules to ensure absolute consistency with AI Lifecycle
+	if totalDays, ok := result["total_days"].(float64); ok {
+		durasiInt := int(totalDays)
+		if durasiInt > 0 {
+			config.DB.Model(&models.KatalogTanaman{}).Where("id_tanaman = ?", tanaman.IDTanaman).Update("estimasi_hari_panen", durasiInt)
+			config.DB.Model(&models.Penjadwalan{}).Where("nama_tanaman = ?", tanaman.NamaTanaman).Update("durasi_panen", durasiInt)
+		}
+	}
+
 	c.JSON(http.StatusOK, result)
 }
 

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, A
 import { jadwalAPI } from '../../services/api';
 import { useSettings } from '../../contexts/SettingsContext';
 import { Colors, Fonts, Spacing, BorderRadius } from '../../constants/theme';
-import { CalendarCheck, CheckCircle2, Clock, AlertTriangle, Droplets, Leaf, Sprout, ChevronRight } from 'lucide-react-native';
+import { CalendarCheck, CheckCircle2, Clock, AlertTriangle, Droplets, Leaf, Sprout, ChevronRight, Trash2 } from 'lucide-react-native';
 
 export default function JadwalScreen() {
   const { settings } = useSettings();
@@ -66,6 +66,32 @@ export default function JadwalScreen() {
     } finally {
       setAttentionLoading(false);
     }
+  };
+
+  const handleDeleteJadwal = (id: number, namaTanaman: string) => {
+    Alert.alert(
+      "Hentikan Produksi",
+      `Apakah Anda yakin ingin menghentikan jadwal produksi untuk ${namaTanaman}? Semua riwayat tugas akan dihapus secara permanen.`,
+      [
+        { text: "Batal", style: "cancel" },
+        { 
+          text: "Hentikan", 
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setLoading(true);
+              await jadwalAPI.delete(id);
+              fetchJadwal();
+              Alert.alert("Sukses", "Jadwal berhasil dihentikan.");
+            } catch (error) {
+              console.log('Error deleting jadwal:', error);
+              Alert.alert("Error", "Gagal menghentikan jadwal.");
+              setLoading(false);
+            }
+          }
+        }
+      ]
+    );
   };
 
   // Get the current device time for comparison
@@ -296,9 +322,9 @@ export default function JadwalScreen() {
                     </View>
                   )}
 
-                  {/* Perhatian Button if missed tasks > 0 */}
-                  {jadwal.missed_tasks_count > 0 && (
-                    <View style={styles.attentionRow}>
+                  {/* Action Buttons Row */}
+                  <View style={styles.actionRow}>
+                    {jadwal.missed_tasks_count > 0 && (
                       <TouchableOpacity 
                         style={styles.attentionBtn}
                         onPress={() => handleGetAttention(jadwal.id, hariKe, jadwal.missed_tasks_count)}
@@ -306,8 +332,16 @@ export default function JadwalScreen() {
                         <AlertTriangle color={Colors.white} size={16} />
                         <Text style={styles.attentionBtnText}>Perhatian</Text>
                       </TouchableOpacity>
-                    </View>
-                  )}
+                    )}
+                    
+                    <TouchableOpacity 
+                      style={styles.stopBtn}
+                      onPress={() => handleDeleteJadwal(jadwal.id, jadwal.nama_tanaman)}
+                    >
+                      <Trash2 color={Colors.foreground} size={14} />
+                      <Text style={styles.stopBtnText}>Hentikan Produksi</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             );
@@ -689,6 +723,13 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
     flexDirection: 'row',
   },
+  actionRow: {
+    marginTop: Spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+  },
   attentionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -702,6 +743,22 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     fontSize: 14,
     color: Colors.white,
+  },
+  stopBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: BorderRadius.full,
+    gap: 8,
+  },
+  stopBtnText: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
+    color: Colors.foreground,
   },
   modalOverlay: {
     flex: 1,

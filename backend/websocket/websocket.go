@@ -2,6 +2,7 @@ package websocket
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -43,15 +44,23 @@ func InitWebSocket() *melody.Melody {
 	})
 
 	Melody.HandleMessage(func(s *melody.Session, msg []byte) {
+		log.Println("Received WS message:", string(msg))
 		var data map[string]interface{}
 		if err := json.Unmarshal(msg, &data); err != nil {
 			return
 		}
 
-		// Handle auth message to associate session with user
 		if msgType, ok := data["type"].(string); ok && msgType == "auth" {
+			var userID uint
 			if userIDFloat, ok := data["user_id"].(float64); ok {
-				userID := uint(userIDFloat)
+				userID = uint(userIDFloat)
+			} else if userIDStr, ok := data["user_id"].(string); ok {
+				var idUint uint
+				fmt.Sscanf(userIDStr, "%d", &idUint)
+				userID = idUint
+			}
+
+			if userID > 0 {
 				mu.Lock()
 				userSessions[s] = userID
 				mu.Unlock()

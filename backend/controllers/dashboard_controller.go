@@ -511,11 +511,25 @@ func generateAISchedule(penjadwalanID uint, namaTanaman string) {
 	if cahayaJam == 0 { cahayaJam = 12 }
 	if humidityAvg == 0 { humidityAvg = 70 }
 
-	prompt := fmt.Sprintf(`Rancanglah jadwal perawatan harian otomatis untuk tanaman %s mulai dari hari ke-1 hingga masa panen asli tanaman tersebut (jangan dipukul rata 90 hari, sesuaikan dengan siklus hidup aslinya). 
+	prompt := fmt.Sprintf(`Rancanglah jadwal perawatan harian otomatis untuk tanaman %s mulai dari hari ke-1 hingga masa panen asli tanaman tersebut (jangan dipukul rata 90 hari, sesuaikan dengan siklus hidup aslinya, misal kelapa 1095 hari). 
 Gunakan data spesifikasi dari katalog sebagai acuan utama (suhu ideal %.0f°C - %.0f°C, kebutuhan cahaya %.0f jam/hari, dan kelembapan %.0f%%). 
 Sesuaikan instruksi kegiatan secara dinamis dengan membandingkannya terhadap kondisi cuaca real-time saat ini (suhu %.1f°C, kelembapan %.0f%%, dan kondisi %s) agar rekomendasi penyiraman dan pemupukan menjadi akurat. 
 Setiap tugas HARUS memiliki jam pengerjaan spesifik (waktu_mulai dan waktu_selesai dalam format "HH:MM", contoh: "07:00", "09:00"). Distribusikan tugas sepanjang hari (pagi 06:00-09:00, siang 11:00-14:00, sore 16:00-18:00).
-Hasilkan output hanya dalam format JSON array yang berisi kolom: hari_ke, kegiatan, deskripsi, kategori, waktu_mulai, waktu_selesai agar dapat langsung disimpan ke dalam database sistem.`,
+Hasilkan output HANYA dalam format JSON object seperti ini:
+{
+  "estimasi_panen_hari": [integer total hari panen asli tanaman, contoh: 1095],
+  "jadwal": [
+    {
+      "hari_ke": 1,
+      "kegiatan": "Penyiraman",
+      "deskripsi": "...",
+      "kategori": "Penyiraman",
+      "waktu_mulai": "07:00",
+      "waktu_selesai": "09:00"
+    }
+  ]
+}
+Berikan beberapa sampel kegiatan yang mewakili siklus perawatan, tidak perlu menuliskan tiap hari jika polanya berulang.`,
 		namaTanaman, suhuMin, suhuMax, cahayaJam, humidityAvg, temp, humidity, desc)
 
 	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
@@ -529,22 +543,25 @@ Hasilkan output hanya dalam format JSON array yang berisi kolom: hari_ke, kegiat
 	aiResponse = strings.TrimSuffix(aiResponse, "```")
 	aiResponse = strings.TrimSpace(aiResponse)
 
-	var tasks []struct {
-		HariKe       int    `json:"hari_ke"`
-		Kegiatan     string `json:"kegiatan"`
-		Deskripsi    string `json:"deskripsi"`
-		Kategori     string `json:"kategori"`
-		WaktuMulai   string `json:"waktu_mulai"`
-		WaktuSelesai string `json:"waktu_selesai"`
+	var aiResult struct {
+		EstimasiPanenHari int `json:"estimasi_panen_hari"`
+		Jadwal            []struct {
+			HariKe       int    `json:"hari_ke"`
+			Kegiatan     string `json:"kegiatan"`
+			Deskripsi    string `json:"deskripsi"`
+			Kategori     string `json:"kategori"`
+			WaktuMulai   string `json:"waktu_mulai"`
+			WaktuSelesai string `json:"waktu_selesai"`
+		} `json:"jadwal"`
 	}
 
-	if err := json.Unmarshal([]byte(aiResponse), &tasks); err != nil {
+	if err := json.Unmarshal([]byte(aiResponse), &aiResult); err != nil {
 		log.Println("Failed to parse AI schedule:", err)
 		return
 	}
 
-	maxHari := 0
-	for _, task := range tasks {
+	maxHari := aiResult.EstimasiPanenHari
+	for _, task := range aiResult.Jadwal {
 		wMulai := task.WaktuMulai
 		wSelesai := task.WaktuSelesai
 		if wMulai == "" {
@@ -563,16 +580,21 @@ Hasilkan output hanya dalam format JSON array yang berisi kolom: hari_ke, kegiat
 			WaktuSelesai:  wSelesai,
 		}
 		config.DB.Create(&detail)
-		if task.HariKe > maxHari {
+		if maxHari == 0 && task.HariKe > maxHari {
 			maxHari = task.HariKe
 		}
 	}
 
 	if maxHari > 0 {
 		config.DB.Model(&models.Penjadwalan{}).Where("id = ?", penjadwalanID).Update("durasi_panen", maxHari)
+		
+		// Update KatalogTanaman if it has no harvest estimation yet
+		config.DB.Model(&models.KatalogTanaman{}).
+			Where("nama_tanaman = ? AND (estimasi_hari_panen IS NULL OR estimasi_hari_panen = 0)", namaTanaman).
+			Update("estimasi_hari_panen", maxHari)
 	}
 
-	log.Printf("✅ AI Schedule generated for penjadwalan #%d: %d tasks", penjadwalanID, len(tasks))
+	log.Printf("✅ AI Schedule generated for penjadwalan #%d: %d tasks, Panen: %d hari", penjadwalanID, len(aiResult.Jadwal), maxHari)
 }
 
 // SyncKatalogAi - POST /api/sync-katalog-ai

@@ -137,7 +137,7 @@ Jawablah dengan gaya bahasa yang ramah dan solutif.`, weatherContext, scheduleCo
 		}
 
 		jsonPayload, _ := json.Marshal(payload)
-		url := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=%s", geminiApiKey)
+		url := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=%s", geminiApiKey)
 		req, _ := http.NewRequest("POST", url, strings.NewReader(string(jsonPayload)))
 		req.Header.Set("Content-Type", "application/json")
 
@@ -154,13 +154,20 @@ Jawablah dengan gaya bahasa yang ramah dan solutif.`, weatherContext, scheduleCo
 		var result map[string]interface{}
 		json.Unmarshal(body, &result)
 
-		if candidates, ok := result["candidates"].([]interface{}); ok && len(candidates) > 0 {
-			if candidate, ok := candidates[0].(map[string]interface{}); ok {
-				if content, ok := candidate["content"].(map[string]interface{}); ok {
-					if parts, ok := content["parts"].([]interface{}); ok && len(parts) > 0 {
-						if part, ok := parts[0].(map[string]interface{}); ok {
-							if text, ok := part["text"].(string); ok {
-								aiReply = text
+		// Check for error in response
+		if errMap, ok := result["error"].(map[string]interface{}); ok {
+			if errMsg, ok := errMap["message"].(string); ok {
+				aiReply = "Maaf, terjadi error dari Gemini API: " + errMsg
+			}
+		} else {
+			if candidates, ok := result["candidates"].([]interface{}); ok && len(candidates) > 0 {
+				if candidate, ok := candidates[0].(map[string]interface{}); ok {
+					if content, ok := candidate["content"].(map[string]interface{}); ok {
+						if parts, ok := content["parts"].([]interface{}); ok && len(parts) > 0 {
+							if part, ok := parts[0].(map[string]interface{}); ok {
+								if text, ok := part["text"].(string); ok {
+									aiReply = text
+								}
 							}
 						}
 					}
@@ -169,7 +176,9 @@ Jawablah dengan gaya bahasa yang ramah dan solutif.`, weatherContext, scheduleCo
 		}
 
 		if aiReply == "" {
-			aiReply = "Maaf, respons kosong dari Gemini Vision."
+			// Log raw response for debugging
+			log.Printf("Raw Gemini Response: %s", string(body))
+			aiReply = "Maaf, respons kosong dari Gemini Vision. (Silakan periksa log server untuk detailnya)"
 		}
 
 	} else {
