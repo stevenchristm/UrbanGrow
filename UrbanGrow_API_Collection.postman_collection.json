@@ -1,0 +1,660 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-1234-56789abcdef0",
+		"name": "UrbanGrow API",
+		"description": "Dokumentasi lengkap API untuk project UrbanGrow. Termasuk autentikasi, manajemen lahan, katalog tanaman, penjadwalan (AI), komunitas (chat), dan fitur admin.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Auth & Public",
+			"item": [
+				{
+					"name": "Register Petani",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Petani Baru\",\n  \"email\": \"petani@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"petani@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "login"]
+						}
+					}
+				},
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@urbangrow.com\",\n  \"password\": \"adminpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Settings (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Profile & Dashboard",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/profile",
+							"host": ["{{base_url}}"],
+							"path": ["api", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Get Dashboard (Petani)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["api", "dashboard"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Lahan (Spaces)",
+			"item": [
+				{
+					"name": "Get Semua Lahan",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/lahan",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan"]
+						}
+					}
+				},
+				{
+					"name": "Create Lahan",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "nama_lahan", "value": "Lahan Belakang Rumah", "type": "text" },
+								{ "key": "tipe", "value": "Outdoor", "type": "text" },
+								{ "key": "panjang", "value": "10", "type": "text" },
+								{ "key": "lebar", "value": "5", "type": "text" },
+								{ "key": "intensitas_cahaya", "value": "Tinggi", "type": "text" },
+								{ "key": "foto", "type": "file", "src": [] }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/lahan",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan"]
+						}
+					}
+				},
+				{
+					"name": "Get Lahan by ID",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/lahan/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Update Lahan",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "nama_lahan", "value": "Lahan Belakang Rumah Update", "type": "text" }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/lahan/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Delete Lahan",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/lahan/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Rekomendasi Lahan (AI)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/lahan/rekomendasi/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "lahan", "rekomendasi", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Katalog",
+			"item": [
+				{
+					"name": "Get Semua Katalog",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/katalog",
+							"host": ["{{base_url}}"],
+							"path": ["api", "katalog"]
+						}
+					}
+				},
+				{
+					"name": "Create Katalog (Admin/Petani)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "nama_tanaman", "value": "Tomat", "type": "text" },
+								{ "key": "deskripsi", "value": "Tanaman tomat ceri", "type": "text" },
+								{ "key": "gambar", "type": "file", "src": [] }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/katalog",
+							"host": ["{{base_url}}"],
+							"path": ["api", "katalog"]
+						}
+					}
+				},
+				{
+					"name": "Update Katalog",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "nama_tanaman", "value": "Tomat Update", "type": "text" }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/katalog/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "katalog", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Get AI Lifecycle (Katalog)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/katalog/:id/ai-lifecycle",
+							"host": ["{{base_url}}"],
+							"path": ["api", "katalog", ":id", "ai-lifecycle"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Jadwal & Tasks",
+			"item": [
+				{
+					"name": "Get Semua Jadwal",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/semua-jadwal",
+							"host": ["{{base_url}}"],
+							"path": ["api", "semua-jadwal"]
+						}
+					}
+				},
+				{
+					"name": "Delete Jadwal",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/semua-jadwal/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "semua-jadwal", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Attention Analysis (AI)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/semua-jadwal/:id/attention",
+							"host": ["{{base_url}}"],
+							"path": ["api", "semua-jadwal", ":id", "attention"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Complete Task (Selesai Manual)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/complete-task/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "complete-task", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Tandai Selesai (Batch)",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"task_ids\": [1, 2, 3]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/jadwal/selesai",
+							"host": ["{{base_url}}"],
+							"path": ["api", "jadwal", "selesai"]
+						}
+					}
+				},
+				{
+					"name": "Test Notification",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/test-notification",
+							"host": ["{{base_url}}"],
+							"path": ["api", "test-notification"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Simpan Tanam & Sync",
+			"item": [
+				{
+					"name": "Simpan Tanam",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_lahan\": 1,\n  \"id_katalog\": 1,\n  \"tanggal_tanam\": \"2023-10-01T00:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/simpan-tanam",
+							"host": ["{{base_url}}"],
+							"path": ["api", "simpan-tanam"]
+						}
+					}
+				},
+				{
+					"name": "Sync Katalog AI",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/sync-katalog-ai",
+							"host": ["{{base_url}}"],
+							"path": ["api", "sync-katalog-ai"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Users (Community)",
+			"item": [
+				{
+					"name": "Get Semua User",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user"]
+						}
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "nama", "value": "Petani Baru Updated", "type": "text" },
+								{ "key": "logo", "type": "file", "src": [] }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user", ":id"],
+							"variable": [ { "key": "id", "value": "1" } ]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. AI Assistant & Chat",
+			"item": [
+				{
+					"name": "Get AI Chat History",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/ai-assistant",
+							"host": ["{{base_url}}"],
+							"path": ["api", "ai-assistant"]
+						}
+					}
+				},
+				{
+					"name": "Ask AI",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Bagaimana cara merawat tomat yang daunnya kuning?\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/ai-ask",
+							"host": ["{{base_url}}"],
+							"path": ["api", "ai-ask"]
+						}
+					}
+				},
+				{
+					"name": "Clear AI Chat",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/ai-clear",
+							"host": ["{{base_url}}"],
+							"path": ["api", "ai-clear"]
+						}
+					}
+				},
+				{
+					"name": "Get Community Chat",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chat/messages",
+							"host": ["{{base_url}}"],
+							"path": ["api", "chat", "messages"]
+						}
+					}
+				},
+				{
+					"name": "Send Community Chat",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Halo semuanya!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat/send",
+							"host": ["{{base_url}}"],
+							"path": ["api", "chat", "send"]
+						}
+					}
+				},
+				{
+					"name": "Clear Chat History",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chat/clear",
+							"host": ["{{base_url}}"],
+							"path": ["api", "chat", "clear"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Admin",
+			"item": [
+				{
+					"name": "Admin Dashboard",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "dashboard"]
+						}
+					}
+				},
+				{
+					"name": "Update Settings",
+					"request": {
+						"auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{token}}", "type": "string" } ] },
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"app_name\": \"UrbanGrow Super\",\n  \"maintenance_mode\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "settings"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "10. Websockets & Misc",
+			"item": [
+				{
+					"name": "WebSocket Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/ws/health",
+							"host": ["{{base_url}}"],
+							"path": ["ws", "health"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

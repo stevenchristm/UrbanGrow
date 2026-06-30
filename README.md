@@ -39,6 +39,12 @@ Sistem ini menggunakan bahasa desain eksklusif yang disebut **Eco Modern**, yang
 - **Comprehensive Dashboard**: Panel analitik grafis bagi admin untuk memantau metrik pertumbuhan, statistik pengguna, dan performa komunitas (`dashboard_controller`).
 - **Secure Authentication**: Proteksi akses berlapis menggunakan JWT dan autentikasi terenkripsi (`auth_controller`).
 
+## 🌐 API Documentation
+
+Dokumentasi lengkap REST API untuk UrbanGrow tersedia di Postman. Anda dapat mengakses collection-nya melalui tautan berikut:
+
+[**🔗 UrbanGrow Postman Collection**](https://stevenchristm-1983409.postman.co/workspace/Steven's-Workspace~19f00cdd-43dd-4b98-8cef-158007b95ef5/collection/52327613-f5465832-1a71-4acc-a89e-e15703015011?action=share&source=copy-link&creator=52327613)
+
 ---
 
 ## 🚀 Instalasi & Cara Menjalankan
@@ -81,7 +87,13 @@ OPENWEATHER_API_KEY=your_api_key
 # Masuk ke folder backend
 cd backend
 go mod tidy
+
+# Cara Standar:
 go run main.go
+
+# CARA AMAN (Direkomendasikan jika `go run` diblokir oleh Windows Defender/AppLocker):
+go build -o main.exe main.go
+.\main.exe
 ```
 *API berjalan di: http://localhost:8080*
 
