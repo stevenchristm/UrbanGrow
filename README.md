@@ -39,11 +39,36 @@ Sistem ini menggunakan bahasa desain eksklusif yang disebut **Eco Modern**, yang
 - **Comprehensive Dashboard**: Panel analitik grafis bagi admin untuk memantau metrik pertumbuhan, statistik pengguna, dan performa komunitas (`dashboard_controller`).
 - **Secure Authentication**: Proteksi akses berlapis menggunakan JWT dan autentikasi terenkripsi (`auth_controller`).
 
-## 🌐 API Documentation
+## 🌐 API Documentation & Postman Collection
 
-Dokumentasi lengkap REST API untuk UrbanGrow tersedia di Postman. Anda dapat mengakses collection-nya melalui tautan berikut:
+Dokumentasi lengkap REST API untuk UrbanGrow tersedia dalam format Postman Collection. File ekspor koleksi Postman telah disediakan di dalam repositori ini: `UrbanGrow_API_Collection.postman_collection.json`.
 
-[**🔗 UrbanGrow Postman Collection**](https://stevenchristm-1983409.postman.co/workspace/Steven's-Workspace~19f00cdd-43dd-4b98-8cef-158007b95ef5/collection/52327613-f5465832-1a71-4acc-a89e-e15703015011?action=share&source=copy-link&creator=52327613)
+### Cara Menggunakan API via Postman
+1. Buka aplikasi **Postman**.
+2. Klik tombol **Import** di kiri atas.
+3. Pilih tab **File** dan unggah/pilih file `UrbanGrow_API_Collection.postman_collection.json` dari folder utama repositori ini.
+4. Koleksi "UrbanGrow API" akan otomatis ditambahkan ke *workspace* Anda beserta seluruh folder endpoint-nya.
+
+### Konfigurasi Variabel & Autentikasi
+Koleksi ini menggunakan *Collection Variables* bawaan:
+- `base_url`: Mengarah ke `http://localhost:8080` (sesuaikan port jika diperlukan).
+- `token`: Akan diset **secara otomatis** ketika Anda melakukan request **Login** atau **Admin Login**.
+
+> [!TIP]
+> **Autentikasi Otomatis (Auto-Set JWT):** Anda tidak perlu menyalin-tempel token secara manual ke setiap endpoint. Cukup jalankan *Hit* pada endpoint `POST /api/login` atau `POST /api/admin/login`, lalu *test script* pada Postman akan otomatis menyimpan JWT Token ke variabel `token`. Request lain yang membutuhkan autentikasi akan langsung menggunakan variabel ini melalui *Bearer Token*.
+
+### Ringkasan Endpoint Utama
+API ini dipisahkan menjadi beberapa modul untuk memudahkan pengembangan frontend dan panel admin:
+- 🔐 **Auth & Profile**: `/api/register`, `/api/login`, `/api/profile`, `/api/dashboard`
+- 🏡 **Lahan (Spaces)**: CRUD lahan dan fitur `/api/lahan/rekomendasi/:id` (AI Recommendation)
+- 🌱 **Katalog Tanaman**: CRUD tanaman dan fitur `/api/katalog/:id/ai-lifecycle` (AI Plant Lifecycle)
+- 📅 **Jadwal & Tasks**: Pemantauan & penyelesaian tugas, serta `/api/semua-jadwal/:id/attention` (AI Attention)
+- 🤖 **AI Assistant & Chat**: Fitur `/api/ai-ask` (Tanya Botanis AI Groq/Gemini), dan `/api/chat/messages` (Forum Komunitas)
+- ⚙️ **Admin**: Dashboard metrik admin `/api/admin/dashboard` dan Settings
+- 🔌 **WebSocket**: `/ws/health` untuk sinkronisasi real-time
+
+Jika Anda ingin melihat koleksi aslinya langsung di web, Anda juga dapat mengakses tautan berikut:
+[**🔗 UrbanGrow Postman Workspace Public Link**](https://stevenchristm-1983409.postman.co/workspace/Steven's-Workspace~19f00cdd-43dd-4b98-8cef-158007b95ef5/collection/52327613-f5465832-1a71-4acc-a89e-e15703015011?action=share&source=copy-link&creator=52327613)
 
 ---
 
