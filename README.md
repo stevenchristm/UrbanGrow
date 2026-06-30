@@ -41,12 +41,12 @@ Sistem ini menggunakan bahasa desain eksklusif yang disebut **Eco Modern**, yang
 
 ## 🌐 API Documentation & Postman Collection
 
-Dokumentasi lengkap REST API untuk UrbanGrow tersedia dalam format Postman Collection. File ekspor koleksi Postman telah disediakan di dalam repositori ini: `UrbanGrow_API_Collection.postman_collection.json`.
+Dokumentasi lengkap REST API untuk UrbanGrow tersedia dalam format Postman Collection. File ekspor koleksi Postman telah disediakan di dalam repositori ini: `UrbanGrow API.postman_collection.json`.
 
 ### Cara Menggunakan API via Postman
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import** di kiri atas.
-3. Pilih tab **File** dan unggah/pilih file `UrbanGrow_API_Collection.postman_collection.json` dari folder utama repositori ini.
+3. Pilih tab **File** dan unggah/pilih file `UrbanGrow API.postman_collection.json` dari folder utama repositori ini.
 4. Koleksi "UrbanGrow API" akan otomatis ditambahkan ke *workspace* Anda beserta seluruh folder endpoint-nya.
 
 ### Konfigurasi Variabel & Autentikasi
