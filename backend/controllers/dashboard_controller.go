@@ -532,7 +532,7 @@ Hasilkan output HANYA dalam format JSON object seperti ini:
 Berikan beberapa sampel kegiatan yang mewakili siklus perawatan, tidak perlu menuliskan tiap hari jika polanya berulang.`,
 		namaTanaman, suhuMin, suhuMax, cahayaJam, humidityAvg, temp, humidity, desc)
 
-	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
+	aiResponse := callGroqAPI(groqKey, prompt, "groq/compound", 0.5)
 	if aiResponse == "" {
 		return
 	}
@@ -614,7 +614,7 @@ Hasilkan output hanya dalam format JSON object dengan format: {"Nama Tanaman": d
 Pastikan durasi yang diberikan akurat berdasarkan siklus hidup asli tanaman tersebut (contoh: Padi sekitar 110-120 hari). 
 Berikan nilai integer tunggal untuk tiap tanaman.`, tanamanStr)
 
-	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
+	aiResponse := callGroqAPI(groqKey, prompt, "groq/compound", 0.5)
 	if aiResponse == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "message": "AI gagal memberikan data yang valid."})
 		return

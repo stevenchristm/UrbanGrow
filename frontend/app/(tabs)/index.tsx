@@ -7,7 +7,7 @@ import { Colors, Fonts, Spacing, BorderRadius } from '../../constants/theme';
 import { Cloud, Droplets, Wind, Plus, MapPin, Calendar, Clock, X, ChevronDown, Sprout } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from 'expo-router';
 import { API_URL } from '../../constants/config';
 import DateTimePicker from '@react-native-community/datetimepicker';
 

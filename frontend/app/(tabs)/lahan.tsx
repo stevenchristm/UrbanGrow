@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, Modal, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from 'expo-router';
 import { useSettings } from '../../contexts/SettingsContext';
 import { lahanAPI } from '../../services/api';
 import { Colors, Fonts, Spacing, BorderRadius } from '../../constants/theme';

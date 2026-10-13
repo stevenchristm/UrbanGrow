@@ -157,7 +157,7 @@ Hasilkan output HANYA dalam format JSON array persis seperti ini (tanpa markdown
   }
 ]`, lahan.SuhuLahan, lahan.CahayaLahan, catalogStr)
 
-	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
+	aiResponse := callGroqAPI(groqKey, prompt, "groq/compound", 0.5)
 	
 	var aiResults []struct {
 		IDTanaman     uint   `json:"id_tanaman"`
@@ -453,7 +453,7 @@ Format WAJIB JSON persis seperti ini:
 }
 Hanya kembalikan JSON object murni tanpa markdown blocks.`
 
-	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
+	aiResponse := callGroqAPI(groqKey, prompt, "groq/compound", 0.5)
 	if aiResponse == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI gagal memberikan data"})
 		return

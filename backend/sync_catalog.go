@@ -50,7 +50,7 @@ Format WAJIB JSON persis seperti ini:
     ]
 }`
 		
-		aiResponse := callGroqAPI(groqKey, prompt, "llama-3.3-70b-versatile", 0.5)
+		aiResponse := callGroqAPI(groqKey, prompt, "groq/compound", 0.5)
 		if aiResponse == "" {
 			fmt.Println("❌ Gagal mendapatkan data untuk:", nama)
 			continue

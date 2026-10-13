@@ -293,7 +293,7 @@ func GetAttentionAnalysis(c *gin.Context) {
 		return
 	}
 
-	aiResponse := callGroqAPI(groqKey, prompt, "llama-3.1-8b-instant", 0.5)
+	aiResponse := callGroqAPI(groqKey, prompt, "groq/compound-mini", 0.5)
 	if aiResponse == "" {
 		c.JSON(http.StatusOK, gin.H{"analysis": "AI sedang tidak dapat menganalisis tanaman saat ini."})
 		return

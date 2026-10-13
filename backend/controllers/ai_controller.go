@@ -189,7 +189,7 @@ Jawablah dengan gaya bahasa yang ramah dan solutif.`, weatherContext, scheduleCo
 		}
 
 		payload := map[string]interface{}{
-			"model": "llama-3.3-70b-versatile",
+			"model": "groq/compound",
 			"messages": []map[string]string{
 				{"role": "system", "content": systemPrompt},
 				{"role": "user", "content": userPrompt},
